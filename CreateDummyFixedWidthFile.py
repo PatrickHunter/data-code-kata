@@ -1,5 +1,6 @@
 import string
 import random
+from random import randint
 
 def create_padding(padding_length, padding_char =" "):
     return padding_char * padding_length
@@ -15,7 +16,10 @@ def create_fixed_width_header(column_names, offsets):
     return header
 
 def create_dummy_entry(offset):
-    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(offset))
+    padding_length = randint(0,offset)
+    content = ''.join(random.choice(string.ascii_uppercase) for _ in range(offset - padding_length))
+    entry = content + create_padding(padding_length)
+    return entry
 
 def create_dummy_row(offsets):
     row = ""
@@ -36,7 +40,7 @@ def create_dummy_fixed_width_file(column_names, offsets, num_rows, filename):
 
 offsets = [5,12,3,2,13,7,10,13,20,13]
 column_names = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10"]
-filename = "test_output_file"
+filename = "DummyFixedWidthFile"
 num_rows = 10
 
 create_dummy_fixed_width_file(column_names, offsets, num_rows, filename)
