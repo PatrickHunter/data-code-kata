@@ -17,7 +17,7 @@ def create_fixed_width_header(column_names, offsets):
 
 def create_dummy_entry(offset):
     padding_length = randint(0,offset)
-    content = ''.join(random.choice(string.ascii_uppercase) for _ in range(offset - padding_length))
+    content = ''.join(random.choice(string.punctuation + string.ascii_uppercase) for _ in range(offset - padding_length))
     entry = content + create_padding(padding_length)
     return entry
 

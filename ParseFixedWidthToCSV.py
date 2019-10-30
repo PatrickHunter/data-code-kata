@@ -5,7 +5,7 @@ _spec_column_offsets = [5, 12, 3, 2, 13, 7, 10, 13 ,20 ,13]
 
 """Uses a list of offsets to calculate the end position of each column.
 
-   Depending on the circumstances I could have just hardcoded the correct list.
+   I almost just hardcoded the correct list.
    But I wanted something more flexible and to demonstrate that I can write this function.
 """
 def _calculate_cumulative_offsets(offsets):
@@ -24,6 +24,28 @@ def _encode_list_items(items, format = "utf-8"):
     encoded =[x.encode(format) for x in items]
     return encoded
 
+def _create_padding(padding_length, padding_char =" "):
+    return padding_char * padding_length
+
+
+
+def _create_fixed_width_header(column_names, offsets):
+    header = ""
+    for x in range(0, len(column_names)):
+        padding = _create_padding(offsets[x] - len(column_names[x]))
+        header += column_names[x]
+        header += padding
+    header += "\n"
+    return header
+
+def _split_fixed_width_row(row, cumulative_offsets):
+    split_row = []
+    start_index = 0
+    for cumulative_offset in cumulative_offsets:
+        entry = row[start_index:cumulative_offset]
+        split_row.append(entry)
+        start_index = cumulative_offset
+    return split_row
 
 def parse_fixed_width_file_to_csv(input_file,
                                   output_file,
@@ -36,8 +58,8 @@ def parse_fixed_width_file_to_csv(input_file,
     Args:
         input_file: The name of the input file.
         output_file; The name of the output file.
-        input_encoding: Encoding of the input file, defaults to windows-1252
-        output_endcoing: Endcoding of the output file, defaults to utf-8
+        input_encoding
+        output_encoding: Endcoding of the output file, defaults to utf-8
         column_names: List of column names, defaults to the spec.
         offsets: List of offsets, defaults to the spec.
     Returns:
@@ -48,3 +70,26 @@ def parse_fixed_width_file_to_csv(input_file,
         InvalidSourceEncodingError: The input encoding does not match input_encoding.
         NonconvertableValueWarning: The input contains uses character(s) not in output_encoding
     """
+    input =  open(input_file, 'r') 
+    output = open(output_file, 'wb')
+    writer = csv.writer(output)
+
+    expected_header = _create_fixed_width_header(column_names, offsets)
+    header = input.readline()
+    if expected_header != header:
+        raise ValueError("expected header '%str' got header '%str" % (expected_header, header))
+    writer.writerow(_encode_list_items(column_names, output_encoding))
+
+    cumulative_offsets = _calculate_cumulative_offsets(offsets)
+    row_len = sum(offsets) + 1
+    
+    for row in input:
+        assert(len(row) == row_len), "row not the expected length"
+        split_row = _split_fixed_width_row(row, cumulative_offsets)
+        encoded_row =_encode_list_items(split_row, output_encoding)
+        writer.writerow(encoded_row)
+    output.close    
+    input.close()
+    
+    
+parse_fixed_width_file_to_csv("DummyFixedWidthFile", "DummyCSVFile.csv")
