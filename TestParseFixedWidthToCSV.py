@@ -1,7 +1,9 @@
 import unittest
-
+import os
+import csv
 import ParseFixedWidthToCSV
-from ParseFixedWidthToCSV import _calculate_cumulative_offsets, _encode_list_items, _create_padding, _split_fixed_width_row
+from ParseFixedWidthToCSV import _calculate_cumulative_offsets, _encode_list_items, _create_padding, _split_fixed_width_row, parse_fixed_width_file_to_csv
+
 
 class TestInternalFunctions(unittest.TestCase):
 
@@ -35,12 +37,57 @@ class TestInternalFunctions(unittest.TestCase):
         created_padding= _create_padding(2, "*")
         self.assertEqual(expected_padding, created_padding)
 
+    """since this is internal and
+    used after assertions I assume valid input.
+    """
     def test_split_fixed_width_row(self):
         row = "aaBBBBC\n"
         cumulative_offsets =[2,6,7]
         expected_split_row =["aa","BBBB","C"]
         split_row = _split_fixed_width_row(row, cumulative_offsets)
         self.assertEqual(split_row, expected_split_row)
+
+class TestExternalFunction(unittest.TestCase):
+    
+    def test_with_no_header(self):
+        with self.assertRaises(ValueError):
+            parse_fixed_width_file_to_csv("NoHeaderTestInput", "NoHeaderTestOutput")
+
+    def test_with_windows_only_char(self):
+        with self.assertRaises(UnicodeDecodeError):
+            parse_fixed_width_file_to_csv("WindowsTestInput", "WindowsOnlyTestOutput")
+    
+    def test_with_wrong_header(self):
+        with self.assertRaises(ValueError):
+            parse_fixed_width_file_to_csv("WrongHeaderTestInput", "WrongHeaderTestOutput")
+
+    def test_with_row_too_long(self):
+        with self.assertRaises(AssertionError):
+            parse_fixed_width_file_to_csv("LongRowHeaderTestInput", "TooLongTestOutput")
+
+    def test_with_row_too_short(self):
+        with self.assertRaises(AssertionError):
+            parse_fixed_width_file_to_csv("RowTooShortTestInput", "TooTestShortOutput")
+    
+    def test_commas_in_input(self):
+        parse_fixed_width_file_to_csv("CommaTestInput", "CommaTestOutput",
+                                      column_names = ["f1"], offsets = [1])
+        with open("CommaTestOutput", 'r') as output:
+            output.readline()
+            expected = '","\r\n'
+            read = output.readline()
+            self.assertEqual(expected,read)
+        os.remove("CommaTestOutput")
+
+    def test_quotes_in_input(self):
+        parse_fixed_width_file_to_csv("QuoteTestInput", "QuoteTestOutput",
+                                      column_names = ["f1"], offsets = [2])
+        with open("QuoteTestOutput", 'r') as output:
+            output.readline()
+            expected = '" """\r\n'
+            read = output.readline()
+            self.assertEqual(expected,read)
+        os.remove("QuoteTestOutput")
 
 if __name__ == '__main__':
     unittest.main()
