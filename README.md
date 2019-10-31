@@ -28,6 +28,6 @@ are used for testing.
 
 ## Testing
 ```
-$python TestParseFixedWidthToCSV.py
+$python TestParseFixedWidthFileToCSV.py
 ```
 Will run the PyUnit tests.
