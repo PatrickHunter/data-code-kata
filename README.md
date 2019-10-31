@@ -3,7 +3,7 @@ This is my (Patrick Hunter's) solution to the coding challenge
 
 ## Requirments
 
-Just Python 3 and this git repo.  No external packages needed.
+Just Python 2 and this git repo.  No external packages needed.
 
 ## Usage
 ```
