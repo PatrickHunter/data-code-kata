@@ -6,7 +6,9 @@ This is my (Patrick Hunter's) solution to the coding challenge
 Just Python 3 and this git repo.  No external packages needed.
 
 ## Usage
+```
 $python RunMe.py
+```
 
 This will create a file named 'DummyFixedWidthFile' and 
 populate it with randomly generated data in the fixed
@@ -25,6 +27,7 @@ primary functions of the previous files.  The remaining files
 are used for testing.
 
 ## Testing
+```
 $python TestParseFixedWidthToCSV.py
-
+```
 Will run the PyUnit tests.
