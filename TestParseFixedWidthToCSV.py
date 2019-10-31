@@ -1,8 +1,8 @@
 import unittest
 import os
 import csv
-import ParseFixedWidthToCSV
-from ParseFixedWidthToCSV import _calculate_cumulative_offsets, _encode_list_items, _create_padding, _split_fixed_width_row, parse_fixed_width_file_to_csv
+import ParseFixedWidthFileToCSV
+from ParseFixedWidthFileToCSV import _calculate_cumulative_offsets, _encode_list_items, _create_padding, _split_fixed_width_row, parse_fixed_width_file_to_csv
 
 
 class TestInternalFunctions(unittest.TestCase):
@@ -67,7 +67,7 @@ class TestExternalFunction(unittest.TestCase):
 
     def test_with_row_too_short(self):
         with self.assertRaises(AssertionError):
-            parse_fixed_width_file_to_csv("RowTooShortTestInput", "TooTestShortOutput")
+            parse_fixed_width_file_to_csv("ShortRowTestInput", "TooTestShortOutput")
     
     def test_commas_in_input(self):
         parse_fixed_width_file_to_csv("CommaTestInput", "CommaTestOutput",
