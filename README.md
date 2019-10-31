@@ -1,20 +1,14 @@
 # Data Engineering Coding Challenge
-<<<<<<< HEAD
-This is my (Patrick Hunter's) solution to the coding challenge.
-=======
 This is my (Patrick Hunter's) solution to the coding challenge
->>>>>>> 34a2f326f6805a29e3445c7a43d008b5d4b45d38
 
 ## Requirments
 
-Just Python 3 and this git repo.  No external packages needed.
+Just Python 2 and this git repo.  No external packages needed.
 
 ## Usage
-<<<<<<< HEAD
+```
 $python RunMe.py
-=======
-$python3 RunMe.py
->>>>>>> 34a2f326f6805a29e3445c7a43d008b5d4b45d38
+```
 
 This will create a file named 'DummyFixedWidthFile' and 
 populate it with randomly generated data in the fixed
@@ -33,10 +27,7 @@ primary functions of the previous files.  The remaining files
 are used for testing.
 
 ## Testing
-<<<<<<< HEAD
-$python TestParseFixedWidthToCSV.py
-=======
-$TestParseFixedWidthToCSV.py
->>>>>>> 34a2f326f6805a29e3445c7a43d008b5d4b45d38
-
+```
+$python TestParseFixedWidthFileToCSV.py
+```
 Will run the PyUnit tests.
