@@ -1,3 +1,8 @@
+"""Wrapper that calls create_dummy_fixed_width_file and
+   parse_fixed_width_file_to_csv with the correct args to generate
+   DummyFixedWidthFile according to spec then parse it to
+   DummyCSVFile.csv while printing what it is doing
+"""
 from ParseFixedWidthFileToCSV import parse_fixed_width_file_to_csv
 from CreateDummyFixedWidthFile import create_dummy_fixed_width_file
 
