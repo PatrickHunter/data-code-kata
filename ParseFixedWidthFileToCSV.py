@@ -23,6 +23,25 @@ def _calculate_cumulative_offsets(offsets):
         cumulative_offsets.append(cumulative_offset)
     return cumulative_offsets
 
+def _create_padding(padding_length, padding_char =" "):
+    """generates padding to append to  short entries"""
+
+    return padding_char * padding_length
+
+
+def _create_fixed_width_header(column_names, offsets):
+    """Creates a string represnting the header row"""
+
+    header = ""
+    for x in range(0, len(column_names)):
+        padding = _create_padding(offsets[x] - len(column_names[x]))
+        header += column_names[x]
+        header += padding
+    header += "\n"
+    return header
+
+
+
 def _encode_list_items(items, format = "utf-8"):
     """Changes the encoding of each list item to the given format, default utf-8"""
 
@@ -34,25 +53,6 @@ def _encode_list_items(items, format = "utf-8"):
         raise e
     return encoded
 
-def _create_padding(padding_length, padding_char =" "):
-    """Creates padding, used if the header must be inferred"""
-
-    return padding_char * padding_length
-
-def _create_fixed_width_header(column_names, offsets):
-    """Creates a fixed width header based on the names and offests
-
-    Not actually needed if the input follows the spec, but I include and option to
-    infer a header in the parsing function.
-    """
-
-    header = ""
-    for x in range(0, len(column_names)):
-        padding = _create_padding(offsets[x] - len(column_names[x]))
-        header += column_names[x]
-        header += padding
-    header += "\n"
-    return header
 
 def _split_fixed_width_row(row, cumulative_offsets):
     """Splits a string into a list of strings using the cumulative_offests"""
