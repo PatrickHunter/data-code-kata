@@ -1,15 +1,17 @@
+"""Functions for parsing a fixed width file to CSV."""
 import csv
 import os
 
 _spec_column_names = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10"]
 _spec_column_offsets = [5, 12, 3, 2, 13, 7, 10, 13 ,20 ,13]
 
-"""Uses a list of offsets to calculate the end position of each column.
-
-   I almost just hardcoded the correct list.
-   But I wanted something more flexible and to demonstrate that I can write this function.
-"""
 def _calculate_cumulative_offsets(offsets):
+    """Uses a list of offsets to calculate the end position of each column.
+
+    I almost just hardcoded the correct list.
+    But I wanted something more flexible and to demonstrate that I can write this function.
+    """
+
     assert(len(offsets) >0), "offsets can't be empty"
     cumulative_offset = 0
     cumulative_offsets = []
@@ -22,6 +24,8 @@ def _calculate_cumulative_offsets(offsets):
     return cumulative_offsets
 
 def _encode_list_items(items, format = "utf-8"):
+    """Changes the encoding of each list item to the given format, default utf-8"""
+
     encoded =[]
     try:
         encoded =[x.encode(format) for x in items]
@@ -31,11 +35,17 @@ def _encode_list_items(items, format = "utf-8"):
     return encoded
 
 def _create_padding(padding_length, padding_char =" "):
+    """Creates padding, used if the header must be inferred"""
+
     return padding_char * padding_length
 
-
-
 def _create_fixed_width_header(column_names, offsets):
+    """Creates a fixed width header based on the names and offests
+
+    Not actually needed if the input follows the spec, but I include and option to
+    infer a header in the parsing function.
+    """
+
     header = ""
     for x in range(0, len(column_names)):
         padding = _create_padding(offsets[x] - len(column_names[x]))
@@ -45,6 +55,8 @@ def _create_fixed_width_header(column_names, offsets):
     return header
 
 def _split_fixed_width_row(row, cumulative_offsets):
+    """Splits a string into a list of strings using the cumulative_offests"""
+
     split_row = []
     start_index = 0
     for cumulative_offset in cumulative_offsets:
